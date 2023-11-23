@@ -34,23 +34,23 @@ class PostgresPool:
 
 # Database and AWS S3 configuration
 db_params = {
-    "dbname": process.env.PGDATABASE,
-    "user": process.env.PGUSER,
-    "password": process.env.PGPASSWORD,
-    "host": process.env.PGHOST,
-    "port": int(process.env.PGPORT)
+    "dbname": os.environ.get("PGDATABASE"),
+    "user": os.environ.get("PGUSER"),
+    "password": os.environ.get("PGPASSWORD"),
+    "host": os.environ.get("PGHOST"),
+    "port": int(os.environ.get("PGPORT"))
 }
 db_pool = PostgresPool(minconn=1, maxconn=10, **db_params)
 
-s3_client = boto3.client('s3', aws_access_key_id=process.env.AWS_ACCESS_KEY_ID, aws_secret_access_key=process.env.AWS_SECRET_KEY_ID)
+s3_client = boto3.client('s3', aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_KEY_ID"))
 
 # OpenAI API configuration
-openai.api_key = process.env.OPENAI_KEY_NAME
+openai.api_key = os.environ.get("OPENAI_KEY_NAME")
 
 def upload_image_to_s3(file):
     try:
         file_key = str(uuid.uuid4())  # Generate unique file name
-        s3_client.upload_fileobj(file, process.env.IMAGE_BUCKET_NAME, file_key)
+        s3_client.upload_fileobj(file, os.environ.get("IMAGE_BUCKET_NAME"), file_key)
         return f"https://{YOUR_BUCKET_NAME}.s3.amazonaws.com/{file_key}"
     except Exception as e:
         print(f"Error uploading to S3: {e}")
@@ -92,5 +92,5 @@ def write_to_db():
     return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=os.getenv("PORT", default=5000))
+    app.run(debug=True, port=os.getos.environ.get("PORT", default=5000))
 
