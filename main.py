@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import psycopg2
+from psycopg2 import pool
 import boto3
 import uuid
 import openai
@@ -7,6 +8,29 @@ import openai
 # Assuming PostgresPool class is already defined
 
 app = Flask(__name__)
+
+class PostgresPool:
+    def __init__(self, minconn, maxconn, **db_params):
+        self._pool = psycopg2.pool.SimpleConnectionPool(minconn, maxconn, **db_params)
+
+    def get_connection(self):
+        try:
+            return self._pool.getconn()
+        except Exception as e:
+            print(f"Error acquiring connection: {e}")
+            return None
+
+    def release_connection(self, connection):
+        try:
+            self._pool.putconn(connection)
+        except Exception as e:
+            print(f"Error releasing connection: {e}")
+
+    def close_all_connections(self):
+        try:
+            self._pool.closeall()
+        except Exception as e:
+            print(f"Error closing connections: {e}")
 
 # Database and AWS S3 configuration
 db_params = {
