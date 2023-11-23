@@ -66,7 +66,7 @@ def get_openai_embedding(text):
         print(f"Error generating embedding: {e}")
         return None
 
-@app.route('/', methods=['POST'])
+@api.route('/', methods=['POST'])
 def log_meal():
     price = request.form.get('price')
     restaurant_name = request.form.get('restaurant_name')
