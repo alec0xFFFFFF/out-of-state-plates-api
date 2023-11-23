@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Blueprint, request, jsonify
 from api import create_api
 import psycopg2
 from psycopg2 import pool
@@ -7,7 +7,7 @@ import boto3
 import uuid
 import openai
 
-api = create_api()
+main = Blueprint('main', __name__)
 
 class PostgresPool:
     def __init__(self, minconn, maxconn, **db_params):
@@ -65,7 +65,7 @@ def get_openai_embedding(text):
         print(f"Error generating embedding: {e}")
         return None
 
-@api.route('/', methods=['POST'])
+@main.route('/', methods=['POST'])
 def log_meal():
     price = request.form.get('price')
     restaurant_name = request.form.get('restaurant_name')
@@ -101,3 +101,6 @@ def log_meal():
         response = {"status": "error", "message": "Unable to connect to the database"}
 
     return jsonify(response)
+    
+def init_api(api):
+    api.register_blueprint(main)
