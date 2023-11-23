@@ -41,6 +41,7 @@ db_params = {
     "host": os.environ.get("PGHOST"),
     "port": int(os.environ.get("PGPORT"))
 }
+print(f"db port: {db_params.port}")
 db_pool = PostgresPool(minconn=1, maxconn=10, **db_params)
 
 s3_client = boto3.client('s3', aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_KEY_ID"))
