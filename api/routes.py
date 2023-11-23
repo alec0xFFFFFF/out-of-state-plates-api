@@ -1,6 +1,6 @@
 import os
 from flask import Blueprint, request, jsonify
-from api import create_api
+from api.api import create_api
 import psycopg2
 from psycopg2 import pool
 import boto3
