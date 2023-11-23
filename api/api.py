@@ -8,7 +8,10 @@ import openai
 
 # Assuming PostgresPool class is already defined
 
-api = Flask(__name__)
+def create_api():
+    api = Flask(__name__)
+    return api
+
 
 class PostgresPool:
     def __init__(self, minconn, maxconn, **db_params):
