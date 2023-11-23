@@ -7,7 +7,7 @@ import boto3
 import uuid
 import openai
 
-main = Blueprint('main', __name__)
+bp = Blueprint('bp', __name__)
 
 class PostgresPool:
     def __init__(self, minconn, maxconn, **db_params):
@@ -65,7 +65,7 @@ def get_openai_embedding(text):
         print(f"Error generating embedding: {e}")
         return None
 
-@main.route('/', methods=['POST'])
+@bp.route('/', methods=['POST'])
 def log_meal():
     price = request.form.get('price')
     restaurant_name = request.form.get('restaurant_name')
@@ -102,5 +102,5 @@ def log_meal():
 
     return jsonify(response)
     
-def init_api(api):
-    api.register_blueprint(main)
+def init_app(app):
+    app.register_blueprint(bp)
