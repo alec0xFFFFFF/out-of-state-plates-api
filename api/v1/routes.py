@@ -23,7 +23,7 @@ recommendation_service = create_recommendation_service(db)
 # TODO get recommendations
 
 @bp.route('/recommend', methods=['POST'])
-def log_meal():
+def recommend_meal():
     user_id = 0 # user_id = get_jwt_identity()
     response = recommendation_service.get_recommendation(request.json, user_id)
 
