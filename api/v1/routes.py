@@ -46,7 +46,7 @@ def login():
     except InvalidCredentialsError as e:
         return jsonify({"error": e.message}), 401
 
-@app.route('/register', methods=['POST'])
+@bp.route('/register', methods=['POST'])
 def register():
     data = request.json
     user = user_service.register(data['username'], data['email'], data['phone-number'], data['password'], data['name'])
