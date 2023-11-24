@@ -2,6 +2,7 @@ import os
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from api.api import create_api
+from api.services.user_service import UserService, InvalidCredentialsError
 import psycopg2
 from psycopg2 import pool
 import boto3
@@ -111,15 +112,18 @@ def log_meal():
 # Login endpoint
 @bp.route('/login', methods=['POST'])
 def login():
-    username = request.json.get('username', None)
-    password = request.json.get('password', None)
-    user = User.query.filter_by(username=username).first()
 
-    if user and check_password_hash(user.password_hash, password):
-        access_token = create_access_token(identity=username)
-        return jsonify(access_token=access_token)
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
 
-    return jsonify({"msg": "Bad username or password"}), 401
+    user_service = UserService(db)
+
+    try:
+        login_result = user_service.login(username, password)
+        return jsonify(login_result), 200
+    except InvalidCredentialsError as e:
+        return jsonify({"error": e.message}), 401
 
 # Protected route
 @bp.route('/protected', methods=['GET'])
