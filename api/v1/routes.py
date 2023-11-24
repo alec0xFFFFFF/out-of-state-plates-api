@@ -22,8 +22,15 @@ recommendation_service = create_recommendation_service(db)
 # TODO get user's meals
 # TODO get recommendations
 
+@bp.route('/recommend', methods=['POST'])
+def log_meal():
+    user_id = 0 # user_id = get_jwt_identity()
+    response = recommendation_service.get_recommendation(request.json, user_id)
 
-@bp.route('/', methods=['POST'])
+    return jsonify(response)
+
+
+@bp.route('/meal', methods=['POST'])
 def log_meal():
     user_id = get_jwt_identity()
     response = recommendation_service.add_meal(request.json, user_id)
