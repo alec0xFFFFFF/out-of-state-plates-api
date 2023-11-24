@@ -1,6 +1,7 @@
 import boto3
 import os
 import openai
+from openai import OpenAI
 import uuid
 from data.models import Meal, Restaurant
 
@@ -10,6 +11,7 @@ class RecommendationService:
     self.s3_client = boto3.client('s3', aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_KEY_ID"))
     # OpenAI API configuration
     openai.api_key = os.environ.get("OPENAI_KEY_NAME")
+    self.openai_client = OpenAI()
 
   def add_restaurant(self, restaurant):
     raise NotImplementedError("add_restaurant must be implemented")
@@ -40,7 +42,17 @@ class RecommendationService:
     db.session.commit()
     return {"status": "success"}
 
-  def get_recommendation(self, request):
+  def get_recommendation(self, request, user_id):
+    completion = self.openai_client.chat.completions.create(
+      model="gpt-3.5-turbo",
+      messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": request.form.get('message')}
+      ]
+    )
+
+    resp = completion.choices[0].message
+    return {"message": resp}
     raise NotImplementedError("get_recommendation must be implemented")
 
   def _upload_image_to_s3(file):
