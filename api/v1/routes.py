@@ -16,8 +16,17 @@ bp = Blueprint('bp', __name__)
 user_service = create_user_service(db)
 recommendation_service = create_recommendation_service(db)
 
-print("connected to database:")
-print(db)
+def test_db_connection():
+    try:
+        # Attempting a simple query to test the connection
+        result = db.engine.execute("SELECT 1")
+        print("Database connection successful.")
+        result.close()  # Close the result object to free resources
+    except OperationalError:
+        print("Database connection failed.")
+
+# Run the function to test the connection
+test_db_connection()
 
         
 # TODO get restaurants
