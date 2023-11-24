@@ -47,7 +47,7 @@ class RecommendationService:
     try:
         file_key = str(uuid.uuid4())  # Generate unique file name
         s3_client.upload_fileobj(file, os.environ.get("IMAGE_BUCKET_NAME"), file_key)
-        return f"https://{os.environ.get("IMAGE_BUCKET_NAME")}.s3.amazonaws.com/{file_key}"
+        return f'https://{os.environ.get("IMAGE_BUCKET_NAME")}.s3.amazonaws.com/{file_key}'
     except Exception as e:
         print(f"Error uploading to S3: {e}")
         return None
