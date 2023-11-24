@@ -20,4 +20,8 @@ class UserService:
     raise InvalidCredentialsError()
 
   def register(self, username, email, phone, password, name):
-      raise NotImplementedError("")
+      user = User(username=username, email=email, phone=phone, name=name)
+      user.set_password(password)
+      db.session.add(user)
+      db.session.commit()
+      return user
