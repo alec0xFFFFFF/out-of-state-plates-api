@@ -50,11 +50,8 @@ class RecommendationService:
       ]
     )
 
-    print(completion)
-
     resp = completion.choices[0].message
-    print(resp)
-    return {"message": resp}
+    return {"message": resp.content}
     raise NotImplementedError("get_recommendation must be implemented")
 
   def _upload_image_to_s3(file):
