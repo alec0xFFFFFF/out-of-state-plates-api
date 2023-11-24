@@ -9,7 +9,7 @@ class RecommendationService:
     self.db = db
     self.s3_client = boto3.client('s3', aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_KEY_ID"))
     # OpenAI API configuration
-    self.openai.api_key = os.environ.get("OPENAI_KEY_NAME")
+    openai.api_key = os.environ.get("OPENAI_KEY_NAME")
 
   def add_restaurant(self, restaurant):
     raise NotImplementedError("add_restaurant must be implemented")
