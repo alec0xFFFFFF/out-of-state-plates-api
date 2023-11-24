@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Boolean, ForeignKey, DateTime
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 
 db = SQLAlchemy()
 
@@ -9,6 +9,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    name = db.Column(db.String(120), nullable=False)
+    phone = db.Column(db.String(120), nullable=False)
     password_hash = db.Column(db.String(128))
     created_at = db.Column(DateTime, default=datetime.utcnow)
     updated_at = db.Column(DateTime, onupdate=datetime.utcnow)
@@ -24,7 +26,6 @@ class Restaurant(db.Model):
     price = db.Column(db.Numeric(10, 2), nullable=False)
     created_at = db.Column(DateTime, default=datetime.utcnow)
     updated_at = db.Column(DateTime, onupdate=datetime.utcnow)
-    # Define other fields as needed
 
 class Meal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
