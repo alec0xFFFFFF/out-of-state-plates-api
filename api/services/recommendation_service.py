@@ -41,11 +41,12 @@ class RecommendationService:
     return {"status": "success"}
 
   def get_recommendation(self, request, user_id):
+    print(request)
     completion = self.openai_client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[
         {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": request.form.get('message')}
+        {"role": "user", "content": request.get('message')}
       ]
     )
 
