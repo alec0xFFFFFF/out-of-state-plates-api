@@ -4,6 +4,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, create_access_token
 from api.api import create_api
 from api.services.factory import create_user_service, create_recommendation_service
+from sqlalchemy.exc import OperationalError
 from data.models import db
 import psycopg2
 from psycopg2 import pool
@@ -19,6 +20,7 @@ recommendation_service = create_recommendation_service(db)
 def test_db_connection():
     try:
         # Attempting a simple query to test the connection
+        print(db.engine)
         result = db.engine.execute("SELECT 1")
         print("Database connection successful.")
         result.close()  # Close the result object to free resources
