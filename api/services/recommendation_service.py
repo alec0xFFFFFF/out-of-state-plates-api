@@ -1,6 +1,5 @@
 import boto3
 import os
-import openai
 from openai import OpenAI
 import uuid
 from data.models import Meal, Restaurant
