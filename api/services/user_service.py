@@ -18,3 +18,6 @@ class UserService:
     if user and check_password_hash(user.password_hash, password):
         return create_access_token(identity=username)
     raise InvalidCredentialsError()
+
+  def register(self, username, email, phone, password, name):
+      raise NotImplementedError("")
