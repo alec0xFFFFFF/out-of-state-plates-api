@@ -1,5 +1,5 @@
 from flask import Flask
-from api.models import db
+from data.models import db
 
 def create_api():
     app = Flask(__name__)
