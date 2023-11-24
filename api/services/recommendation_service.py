@@ -5,6 +5,13 @@ import uuid
 from data.models import Meal, Restaurant
 
 class RecommendationService:
+  # todo log ingredients
+  # for cooking inject ingredients
+
+  # todo for restaurants inject new that other users enjoyed based on user's preferences
+  # todo inject based on location
+  # todo inject based on what's retrieved from embeddings
+
   def __init__(self, db):
     self.db = db
     self.s3_client = boto3.client('s3', aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_KEY_ID"))
