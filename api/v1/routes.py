@@ -1,7 +1,7 @@
 
 import os
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, create_access_token
 from api.api import create_api
 from api.services.factory import create_user_service, create_recommendation_service
 from data.models import db
@@ -45,6 +45,16 @@ def login():
         return jsonify(login_result), 200
     except InvalidCredentialsError as e:
         return jsonify({"error": e.message}), 401
+
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    user = user_service.register(data['username'], data['email'], data['phone-number'], data['password'], data['name'])
+
+    # Create JWT token
+    access_token = create_access_token(identity=user.id)
+
+    return jsonify(access_token=access_token), 201
 
 # Protected route
 @bp.route('/protected', methods=['GET'])
