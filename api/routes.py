@@ -1,5 +1,6 @@
 import os
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from api.api import create_api
 import psycopg2
 from psycopg2 import pool
@@ -64,6 +65,11 @@ def get_openai_embedding(text):
     except Exception as e:
         print(f"Error generating embedding: {e}")
         return None
+        
+# TODO get restaurants
+# TODO get user's meals
+# TODO get recommendations
+
 
 @bp.route('/', methods=['POST'])
 def log_meal():
@@ -101,6 +107,26 @@ def log_meal():
         response = {"status": "error", "message": "Unable to connect to the database"}
 
     return jsonify(response)
-    
+
+# Login endpoint
+@bp.route('/login', methods=['POST'])
+def login():
+    username = request.json.get('username', None)
+    password = request.json.get('password', None)
+    user = User.query.filter_by(username=username).first()
+
+    if user and check_password_hash(user.password_hash, password):
+        access_token = create_access_token(identity=username)
+        return jsonify(access_token=access_token)
+
+    return jsonify({"msg": "Bad username or password"}), 401
+
+# Protected route
+@bp.route('/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
+
 def init_app(app):
     app.register_blueprint(bp)
