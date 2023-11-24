@@ -45,12 +45,13 @@ class RecommendationService:
     completion = self.openai_client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "system", "content": "You are Sous a helpful dining and cooking assistant. Your goal is to help a user pick what to eat being as specific as possible. Give recommendations based on the user's inquiry. For what to cook format the recipe and ingredients so it's easy to purchase and follow. For restaurants give multiple options and describe what to order."},
         {"role": "user", "content": request.get('message')}
       ]
     )
 
     resp = completion.choices[0].message
+    print(resp.content)
     return {"message": resp.content}
     raise NotImplementedError("get_recommendation must be implemented")
 
