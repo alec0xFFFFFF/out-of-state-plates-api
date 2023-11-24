@@ -50,7 +50,10 @@ class RecommendationService:
       ]
     )
 
+    print(completion)
+
     resp = completion.choices[0].message
+    print(resp)
     return {"message": resp}
     raise NotImplementedError("get_recommendation must be implemented")
 
