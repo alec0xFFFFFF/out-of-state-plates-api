@@ -133,5 +133,10 @@ def protected():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
 
+@bp.route('/protected', methods=['GET'])
+def hello_world():
+    response = {"status": "success", "message": "hello world! welcome to out of state plates"}
+    return jsonify(response), 200
+
 def init_api_v1(app):
     app.register_blueprint(bp, url_prefix='/api/v1')
