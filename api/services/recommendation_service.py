@@ -2,6 +2,7 @@ import boto3
 import os
 import openai
 import uuid
+from data.models import Meal, Restaurant
 
 class RecommendationService:
   def __init__(self, db):
@@ -13,8 +14,31 @@ class RecommendationService:
   def add_restaurant(self, restaurant):
     raise NotImplementedError("add_restaurant must be implemented")
 
-  def add_meal(self, meal):
-    raise NotImplementedError("add_meal must be implemented")
+  def add_meal(self, request, user_id):
+    price = request.form.get('price')
+    restaurant_name = request.form.get('restaurant_name')
+    cuisine = request.form.get('cuisine')
+    description = request.form.get('description')
+    image_urls = []
+
+    if 'images' in request.files:
+        for image in request.files.getlist('images'):
+            image_url = self._upload_image_to_s3(image)
+            if image_url:
+                image_urls.append(image_url)
+
+    # Generate embeddings for the description
+    embedding = self._get_openai_embedding(description)
+    if embedding is None:
+        raise Exception("Unable to generate embeddings")
+
+    # todo user_id, restaurant_id
+    meal = Meal(
+        user_id, price, restaurant_name, cuisine, description, image_urls, embedding
+    )
+    db.session.add(meal)
+    db.session.commit()
+    return {"status": "success"}
 
   def get_recommendation(self, request):
     raise NotImplementedError("get_recommendation must be implemented")
