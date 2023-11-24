@@ -23,6 +23,7 @@ def create_api():
     db.init_app(app)    
     jwt = JWTManager(app)
 
+    # Import routes after db to avoid circular imports
     from api.v1.routes import init_api_v1
     init_api_v1(app)
 
