@@ -21,3 +21,10 @@ This is a [Flask](https://flask.palletsprojects.com/en/1.1.x/) app that serves a
 
 - Install Python requirements `pip install -r requirements.txt`
 - Start the server for development `python3 main.py`
+
+## usage
+curl --location 'https://flask-production-e498.up.railway.app/api/v1/recommend' \
+--header 'Content-Type: application/json' \
+--data '{
+    "message": "what'\''s a good chicken tender restaurant in Russian Hill SF?"
+}'
