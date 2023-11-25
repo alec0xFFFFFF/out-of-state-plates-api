@@ -87,9 +87,9 @@ class RecommendationService:
      return "You are Sous a helpful dining and cooking assistant. Your goal is to help a user pick what to eat being as specific as possible. Give recommendations based on the user's inquiry. For what to cook format the recipe and ingredients so it's easy to purchase and follow. For restaurants give multiple options and describe what to order. Limit the response to around 30 tokens and give both dining out and recipe recommendations."
 
   def _assemble_context(self, classification, lat, long, location):
-     if Classification.RECIPE:
+     if classification == Classification.RECIPE:
         return self._assemble_recipe_recommendation_context()
-     elif Classification.RESTAURANT:
+     elif classification == Classification.RESTAURANT:
         ctx = self._assemble_restaurant_recommendation_context(lat, long, location)
         print("restaurant")
         print(ctx)
