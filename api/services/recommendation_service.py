@@ -74,9 +74,14 @@ class RecommendationService:
      return Classification.EITHER
 
   def _assemble_restaurant_recommendation_context(self):
+     # todo fetch nearby restaurants
+     # fetch based on preference
      return "You are Sous a helpful dining assistant. Your goal is to help a user pick what to eat being as specific as possible. Give recommendations based on the user's inquiry. For restaurants give multiple options and describe what to order. Limit the response to around 60 tokens and only recommend restaurants."
 
   def _assemble_recipe_recommendation_context(self):
+     # todo fetch recipes based on embeddings
+     # todo fetch ingredients user has
+     # todo fetch dietary preferences and factor in
      return "You are Sous a helpful cooking assistant. Your goal is to help a user pick what to eat being as specific as possible. Give recommendations based on the user's inquiry. For what to cook format the recipe and ingredients so it's easy to purchase and follow. Limit the response to around 150 tokens and only recommend recipes."
   
   def _assemble_default_context(self):
@@ -84,9 +89,10 @@ class RecommendationService:
 
   def _assemble_context(self, classification):
      if Classification.RECIPE:
-        pass
+        return self._assemble_recipe_recommendation_context()
      elif Classification.RESTAURANT:
         return self._assemble_restaurant_recommendation_context()
+     return self._assemble_default_context()
 
   def get_recommendation(self, request, user_id):
     # todo add moderation
