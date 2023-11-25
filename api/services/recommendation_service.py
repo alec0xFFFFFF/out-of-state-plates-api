@@ -18,6 +18,10 @@ class RecommendationService:
   # todo inject based on location
   # todo inject based on what's retrieved from embeddings
 
+  # todo link to reservations or togo ordering links
+  # todo link to instacart 
+  # todo create shopping list and add there for user?
+
   def __init__(self, db):
     self.db = db
     self.s3_client = boto3.client('s3', aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_KEY_ID"))
@@ -69,13 +73,29 @@ class RecommendationService:
         return Classification.RESTAURANT
      return Classification.EITHER
 
+  def _assemble_restaurant_recommendation_context(self):
+     return "You are Sous a helpful dining assistant. Your goal is to help a user pick what to eat being as specific as possible. Give recommendations based on the user's inquiry. For restaurants give multiple options and describe what to order. Limit the response to around 60 tokens and only recommend restaurants."
+
+  def _assemble_recipe_recommendation_context(self):
+     return "You are Sous a helpful cooking assistant. Your goal is to help a user pick what to eat being as specific as possible. Give recommendations based on the user's inquiry. For what to cook format the recipe and ingredients so it's easy to purchase and follow. Limit the response to around 150 tokens and only recommend recipes."
+  
+  def _assemble_default_context(self):
+     return "You are Sous a helpful dining and cooking assistant. Your goal is to help a user pick what to eat being as specific as possible. Give recommendations based on the user's inquiry. For what to cook format the recipe and ingredients so it's easy to purchase and follow. For restaurants give multiple options and describe what to order. Limit the response to around 30 tokens and give both dining out and recipe recommendations."
+
+  def _assemble_context(self, classification):
+     if Classification.RECIPE:
+        pass
+     elif Classification.RESTAURANT:
+        return self._assemble_restaurant_recommendation_context()
+
   def get_recommendation(self, request, user_id):
+    # todo add moderation
     print(request)
     classification = self._classify(request.get('message'))
     completion = self.openai_client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[
-        {"role": "system", "content": "You are Sous a helpful dining and cooking assistant. Your goal is to help a user pick what to eat being as specific as possible. Give recommendations based on the user's inquiry. For what to cook format the recipe and ingredients so it's easy to purchase and follow. For restaurants give multiple options and describe what to order. Limit the response to around 30 tokens and only either recommends restaurants or a recipe but not both."},
+        {"role": "system", "content": self._assemble_context(classification)},
         {"role": "user", "content": request.get('message')}
       ]
     )
