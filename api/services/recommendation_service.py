@@ -73,10 +73,10 @@ class RecommendationService:
         return Classification.RESTAURANT
      return Classification.EITHER
 
-  def _assemble_restaurant_recommendation_context(self):
+  def _assemble_restaurant_recommendation_context(self, lat, long, location):
      # todo fetch nearby restaurants
      # fetch based on preference
-     return "You are Sous a helpful dining assistant. Your goal is to help a user pick what to eat being as specific as possible. Give recommendations based on the user's inquiry. For restaurants give multiple options and describe what to order. Limit the response to around 60 tokens and only recommend restaurants."
+     return f"You are Sous a helpful dining assistant. Your goal is to help a user pick what to eat being as specific as possible. Give multiple restaurant recommendations in {location} and describe what to order at each. Limit the response to around 60 tokens and only recommend restaurants. Use bullet points."
 
   def _assemble_recipe_recommendation_context(self):
      # todo fetch recipes based on embeddings
@@ -87,21 +87,25 @@ class RecommendationService:
   def _assemble_default_context(self):
      return "You are Sous a helpful dining and cooking assistant. Your goal is to help a user pick what to eat being as specific as possible. Give recommendations based on the user's inquiry. For what to cook format the recipe and ingredients so it's easy to purchase and follow. For restaurants give multiple options and describe what to order. Limit the response to around 30 tokens and give both dining out and recipe recommendations."
 
-  def _assemble_context(self, classification):
+  def _assemble_context(self, classification, lat, long, location):
      if Classification.RECIPE:
         return self._assemble_recipe_recommendation_context()
      elif Classification.RESTAURANT:
-        return self._assemble_restaurant_recommendation_context()
+        return self._assemble_restaurant_recommendation_context(lat, long, location)
      return self._assemble_default_context()
 
   def get_recommendation(self, request, user_id):
     # todo add moderation
     print(request)
+    # todo get default from user profile
+    lat = request.get("latitude", None)
+    lon = request.get("longitude", None)
+    location = request.get("location_name", None)
     classification = self._classify(request.get('message'))
     completion = self.openai_client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[
-        {"role": "system", "content": self._assemble_context(classification)},
+        {"role": "system", "content": self._assemble_context(classification, lat, lon, location)},
         {"role": "user", "content": request.get('message')}
       ]
     )
