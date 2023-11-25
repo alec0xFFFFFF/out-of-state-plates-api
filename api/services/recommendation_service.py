@@ -104,6 +104,7 @@ class RecommendationService:
     lon = request.get("longitude", None)
     location = request.get("location_name", None)
     classification = self._classify(request.get('message'))
+    print(f"classification: {classification}")
     completion = self.openai_client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[
