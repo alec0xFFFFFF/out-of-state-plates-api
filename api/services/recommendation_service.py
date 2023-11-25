@@ -3,7 +3,13 @@ import os
 from openai import OpenAI
 import uuid
 from data.models import Meal, Restaurant
+from enum import Enum
 
+class Classification(Enum):
+   RECIPE = 1
+   RESTAURANT = 2
+   EITHER = 3
+   
 class RecommendationService:
   # todo log ingredients
   # for cooking inject ingredients
@@ -46,9 +52,26 @@ class RecommendationService:
     db.session.add(meal)
     db.session.commit()
     return {"status": "success"}
+  
+  def _classify(self, msg):
+     completion = self.openai_client.chat.completions.create(
+      model="gpt-3.5-turbo",
+      messages=[
+        {"role": "system", "content": "Classify the user's message to recommend either a recipe, a restaurant or either. Return just recipe if the user is looking for a recipe. Return just restaurant if the user is looking for a restaurant recommendation."},
+        {"role": "user", "content": request.get('message')}
+      ]
+      )
+     resp = completion.choices[0].message
+     print(resp.content)
+     if resp.content == "recipe":
+        return Classification.RECIPE
+     elif resp.content == "restaurant":
+        return Classification.RESTAURANT
+     return Classification.EITHER
 
   def get_recommendation(self, request, user_id):
     print(request)
+    classification = self._classify(request.get('message'))
     completion = self.openai_client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[
