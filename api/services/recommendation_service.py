@@ -66,7 +66,6 @@ class RecommendationService:
       ]
       )
      resp = completion.choices[0].message
-     print(resp.content)
      if resp.content == "recipe":
         return Classification.RECIPE
      elif resp.content == "restaurant":
@@ -91,7 +90,10 @@ class RecommendationService:
      if Classification.RECIPE:
         return self._assemble_recipe_recommendation_context()
      elif Classification.RESTAURANT:
-        return self._assemble_restaurant_recommendation_context(lat, long, location)
+        ctx = self._assemble_restaurant_recommendation_context(lat, long, location)
+        print("restaurant")
+        print(ctx)
+        return ctx
      return self._assemble_default_context()
 
   def get_recommendation(self, request, user_id):
@@ -111,7 +113,6 @@ class RecommendationService:
     )
 
     resp = completion.choices[0].message
-    print(resp.content)
     return {"message": resp.content}
     raise NotImplementedError("get_recommendation must be implemented")
 
