@@ -58,7 +58,7 @@ class RecommendationService:
       model="gpt-3.5-turbo",
       messages=[
         {"role": "system", "content": "Classify the user's message to recommend either a recipe, a restaurant or either. Return just recipe if the user is looking for a recipe. Return just restaurant if the user is looking for a restaurant recommendation."},
-        {"role": "user", "content": request.get('message')}
+        {"role": "user", "content": msg}
       ]
       )
      resp = completion.choices[0].message
