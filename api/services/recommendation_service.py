@@ -100,9 +100,9 @@ class RecommendationService:
     # todo add moderation
     print(request)
     # todo get default from user profile
-    lat = request.get("latitude", None)
-    lon = request.get("longitude", None)
-    location = request.get("location_name", None)
+    lat = request.get("latitude")
+    lon = request.get("longitude")
+    location = request.get("location_name")
     classification = self._classify(request.get('message'))
     print(f"classification: {classification}")
     completion = self.openai_client.chat.completions.create(
