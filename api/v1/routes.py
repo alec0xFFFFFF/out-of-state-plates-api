@@ -34,15 +34,16 @@ def recommend_meal():
 def log_meal():
     user_id = 0 # user_id = get_jwt_identity()
     print("logging meal")
-    print(request.json)
-    response = recommendation_service.add_meal(request.json, user_id)
-
-    return jsonify(response)
+    print(request)
+    try:
+        response = recommendation_service.add_meal(request.json, user_id)
+        return jsonify(response)
+    except Exception as e:
+        print(e)
 
 # Login endpoint
 @bp.route('/login', methods=['POST'])
 def login():
-
     data = request.json
     username = data.get('username')
     password = data.get('password')
