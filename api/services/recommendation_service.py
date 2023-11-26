@@ -32,10 +32,14 @@ class RecommendationService:
     raise NotImplementedError("add_restaurant must be implemented")
 
   def add_meal(self, request, user_id):
+    print(request)
     price = request.form.get('price')
     restaurant_name = request.form.get('restaurant_name')
     cuisine = request.form.get('cuisine')
     description = request.form.get('description')
+    meal_name = request.form.get('mealName')
+    price = request.form.get('price')
+    review = request.form.get('review')    
     image_urls = []
 
     if 'images' in request.files:
