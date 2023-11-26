@@ -33,6 +33,8 @@ def recommend_meal():
 @bp.route('/meal', methods=['POST'])
 def log_meal():
     user_id = 0 # user_id = get_jwt_identity()
+    print("logging meal")
+    print(request.json)
     response = recommendation_service.add_meal(request.json, user_id)
 
     return jsonify(response)
