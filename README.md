@@ -6,6 +6,9 @@ tags:
   - flask
 ---
 
+# Core tenets of development
+YAGNI - you aren't going to need it. move fast and don't optimize early. get feedback and iterate
+
 ## Postman collection
 https://alec0xffffff.postman.co/workspace/Sous~31051643-2570-4176-bbd4-74c1136cdd66/collection/11148794-d546ac83-4c14-4a1a-9faa-23d3c674cac6?action=share&creator=11148794
 
@@ -49,7 +52,10 @@ for users:
 - save dishes and restaurants to lists
 - curated lists from food influencers
 - sell access to your lists
+- get recipe
 
 for businesses
 - edit access?
 - advertise?
+- create lists
+- sell recipe or link goldbelly?
