@@ -14,6 +14,17 @@ class User(db.Model):
     password_hash = db.Column(db.Text)
     created_at = db.Column(DateTime, default=datetime.utcnow)
     updated_at = db.Column(DateTime, onupdate=datetime.utcnow)
+    deleted = db.Column(Boolean, nullable=False, default=False)
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'username': self.username,
+            'phone': self.phone,
+            'created_at': self.created_at,
+            'deleted': self.deleted
+        }
   
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -26,6 +37,18 @@ class Restaurant(db.Model):
     price = db.Column(db.Numeric(10, 2), nullable=False)
     created_at = db.Column(DateTime, default=datetime.utcnow)
     updated_at = db.Column(DateTime, onupdate=datetime.utcnow)
+    deleted = db.Column(Boolean, nullable=False, default=False)
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'cuisine': self.cuisine,
+            'description': self.description,
+            'price': self.price,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
+            'deleted': self.deleted
+        }
 
 class Meal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -39,6 +62,7 @@ class Meal(db.Model):
     image_urls = db.Column(db.Text, nullable=True)
     created_at = db.Column(DateTime, default=datetime.utcnow)
     updated_at = db.Column(DateTime, onupdate=datetime.utcnow)
+    deleted = db.Column(Boolean, nullable=False, default=False)
     
     def to_dict(self):
         return {
@@ -51,6 +75,7 @@ class Meal(db.Model):
             'price': self.price,
             'image_urls': self.image_urls,
             'created_at': self.created_at,
-            'updated_at': self.updated_at
+            'updated_at': self.updated_at,
+            'deleted': self.deleted
         }
 

@@ -25,6 +25,8 @@ class RecommendationService:
   # todo link to instacart 
   # todo create shopping list and add there for user?
 
+  # todo move model names to config values
+
   def __init__(self, db):
     self.db = db
     self.s3_client = boto3.client('s3', aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_KEY_ID"), region_name="us-west-2")
@@ -35,9 +37,9 @@ class RecommendationService:
      # todo index
      # todo sort by location from user's request?
      offset = (page_number - 1) * page_size
-     restaurants = Restaurant.query.filter_by().limit(page_size).offset(offset).all()
+     restaurants = Restaurant.query.filter_by(deleted=False).limit(page_size).offset(offset).all()
      restaurants_obj = [restaurant.to_dict() for restaurant in restaurants]
-     total_restaurants_count = Restaurant.query.filter_by().count()
+     total_restaurants_count = Restaurant.query.filter_by(deleted=False).count()
      total_pages = (total_restaurants_count + page_size - 1) // page_size
 
      return {
@@ -79,7 +81,7 @@ class RecommendationService:
      # todo index
      # todo get all meals not just user's?
      offset = (page_number - 1) * page_size
-     meals = Meal.query.filter_by(user_id=user_id).limit(page_size).offset(offset).all()
+     meals = Meal.query.filter_by(user_id=user_id, deleted=False).limit(page_size).offset(offset).all()
      meals_obj = [meal.to_dict() for meal in meals]
      total_meals_count = Meal.query.filter_by(user_id=user_id).count()
      total_pages = (total_meals_count + page_size - 1) // page_size
