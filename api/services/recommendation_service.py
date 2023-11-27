@@ -32,13 +32,11 @@ class RecommendationService:
     raise NotImplementedError("add_restaurant must be implemented")
 
   def add_meal(self, request, user_id):
-    print(request)
     price = request.form.get('price')
     restaurant_name = request.form.get('restaurant_name')
     cuisine = request.form.get('cuisine')
     description = request.form.get('description')
     meal_name = request.form.get('mealName')
-    price = request.form.get('price')
     review = request.form.get('review')    
     image_urls = []
 
@@ -121,7 +119,7 @@ class RecommendationService:
     return {"message": resp.content}
     raise NotImplementedError("get_recommendation must be implemented")
 
-  def _upload_image_to_s3(file):
+  def _upload_image_to_s3(self, file):
     try:
         file_key = str(uuid.uuid4())  # Generate unique file name
         s3_client.upload_fileobj(file, os.environ.get("IMAGE_BUCKET_NAME"), file_key)
@@ -130,7 +128,7 @@ class RecommendationService:
         print(f"Error uploading to S3: {e}")
         return None
 
-def _get_openai_embedding(text):
+def _get_openai_embedding(self, text):
     try:
         response = openai.Embedding.create(input=text, model="text-similarity-babbage-001")
         return response['data'][0]['embedding']
