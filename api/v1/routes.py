@@ -65,12 +65,13 @@ def log_meal():
 # Login endpoint
 @bp.route('/login', methods=['POST'])
 def login():
-    data = request.json
-    username = data.get('username')
-    password = data.get('password')
+    username = data.json.get('username')
+    email = data.json.get('email')
+    phone = data.json.get('phone-number')
+    password = data.json.get('password')
 
     try:
-        login_result = user_service.login(username, password)
+        login_result = user_service.login(username, email, phone, password)
         return jsonify(login_result), 200
     except InvalidCredentialsError as e:
         return jsonify({"error": e.message}), 401
