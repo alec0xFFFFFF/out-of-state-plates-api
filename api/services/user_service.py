@@ -1,3 +1,5 @@
+from data.models import User
+
 class InvalidCredentialsError(Exception):
     """Exception raised for invalid credentials."""
 
