@@ -33,7 +33,8 @@ def recommend_meal_test():
 @bp.route('/meal_test', methods=['POST'])
 def log_meal_test():
     user_id = 1
-    print("logging meal")
+    print("logging test meal")
+    print(f"req: {request.form}")
     try:
         response = recommendation_service.add_meal(request, user_id)
         return jsonify(response)
