@@ -50,16 +50,21 @@ class RecommendationService:
                 image_urls.append(image_url)
     print(image_urls)
     # Generate embeddings for the description
-    print(f"d: {description}, r: {review}")
     description = "test"
     embedding = self._get_openai_embedding(description)
-    print(embedding)
     if embedding is None:
         raise Exception("Unable to generate embeddings")
 
-    # todo user_id, restaurant_id
+    # todo user_id, restaurant_id 
+    # embedding
     meal = Meal(
-        user_id, price, restaurant_name, cuisine, description, image_urls, embedding
+        user_id=user_id,
+        price=price, 
+        cuisine=cuisine, 
+        description=description, 
+        image_urls=image_urls,
+        homecooked=False,
+        name=name
     )
     db.session.add(meal)
     db.session.commit()
@@ -131,13 +136,11 @@ class RecommendationService:
         return f'https://{os.environ.get("IMAGE_BUCKET_NAME")}.s3.amazonaws.com/{file_key}'
     except Exception as e:
         print(f"Error uploading to S3: {e}")
-        print(os.environ.get("IMAGE_BUCKET_NAME"))
         return None
        
   def _get_openai_embedding(self, text):
     try:
         response = self.openai_client.embeddings.create(input=text, model="text-embedding-ada-002")
-        print(response)
         return response.data[0].embedding
     except Exception as e:
         print(f"Error generating embedding: {e}")
