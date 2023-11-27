@@ -4,8 +4,9 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, create_access_token
 from api.api import create_api
 from api.services.factory import create_user_service, create_recommendation_service
+from api.services.user_service import InvalidCredentialsError
 from sqlalchemy.exc import OperationalError
-from data.models import db, InvalidCredentialsError
+from data.models import db
 import psycopg2
 from psycopg2 import pool
 import boto3
