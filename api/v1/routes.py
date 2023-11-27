@@ -65,10 +65,10 @@ def log_meal():
 # Login endpoint
 @bp.route('/login', methods=['POST'])
 def login():
-    username = data.json.get('username')
-    email = data.json.get('email')
-    phone = data.json.get('phone-number')
-    password = data.json.get('password')
+    username = request.json.get('username')
+    email = request.json.get('email')
+    phone = request.json.get('phone-number')
+    password = request.json.get('password')
 
     try:
         login_result = user_service.login(username, email, phone, password)
