@@ -12,11 +12,7 @@ class UserService:
   def __init__(self, db):
     self.db = db
 
-  def login(self, request):
-    username = request.json.get('username')
-    email = request.json.get('email')
-    phone = request.json.get('phone-number')
-    password = request.json.get('password')
+  def login(self, username, phone, email, password):
       # todo by username, phone number or  email address
     
     user = User.query.filter_by(username=username).first()
