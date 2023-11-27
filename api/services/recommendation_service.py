@@ -36,7 +36,8 @@ class RecommendationService:
 
   def get_meals(self, request, user_id):
      # todo pagination  and index
-     return Meal.query.filter_by(user_id=user_id).all()
+     meals = Meal.query.filter_by(user_id=user_id).all()
+     return serialized_meals = [meal.to_dict() for meal in meals]
       
   def add_meal(self, request, user_id):
      # todo return  meal
