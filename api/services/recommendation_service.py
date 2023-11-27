@@ -1,9 +1,12 @@
 import boto3
 import os
+import io
 from openai import OpenAI
 import uuid
 from data.models import Meal, Restaurant
-from enum import Enum
+from enum import Enumimport logging
+
+logging.basicConfig(level=logging.INFO)
 
 class Classification(Enum):
    RECIPE = 1
@@ -32,8 +35,6 @@ class RecommendationService:
     raise NotImplementedError("add_restaurant must be implemented")
 
   def add_meal(self, request, user_id):
-    for key, value in request.form.items():
-       print(f"FormField - {key}: {value}")
     price = request.form.get('price')
     restaurant_name = request.form.get('restaurant_name')
     cuisine = request.form.get('cuisine')
@@ -139,6 +140,7 @@ class RecommendationService:
         return f'https://{os.environ.get("IMAGE_BUCKET_NAME")}.s3.amazonaws.com/{file_key}'
     except Exception as e:
         print(f"Error uploading to S3: {e}")
+        print(os.environ.get("IMAGE_BUCKET_NAME"))
         return None
        
   def _get_openai_embedding(self, text):
