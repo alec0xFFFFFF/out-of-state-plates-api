@@ -50,6 +50,17 @@ def recommend_meal():
 
     return jsonify(response)
 
+@bp.route('/meal', methods=['DELETE'])
+@jwt_required()
+def delete_meal():
+    user_id = get_jwt_identity()
+    print(f"logging meal for user {user_id}")
+    try:
+        response = recommendation_service.delete_meal(request, user_id)
+        return jsonify(response)
+    except Exception as e:
+        print(e)
+
 
 @bp.route('/meal', methods=['POST'])
 @jwt_required()
@@ -66,8 +77,32 @@ def log_meal():
 @jwt_required()
 def get_meals():
     user_id = get_jwt_identity()
+    page_size = request.json.get('page-size', 10)
+    page_number = request.json.get('page-number', 1)
     try:
-        response = recommendation_service.get_meals(request, user_id)
+        response = recommendation_service.get_meals(user_id, page_number, page_size)
+        return jsonify(response)
+    except Exception as e:
+        print(e)
+
+@bp.route('/restaurants', methods=['GET'])
+@jwt_required()
+def get_restaurants():
+    user_id = get_jwt_identity()
+    page_size = request.json.get('page-size')
+    page_number = request.json.get('page-number')
+    try:
+        response = recommendation_service.get_restaurants(user_id, page_number, page_size)
+        return jsonify(response)
+    except Exception as e:
+        print(e)
+
+@bp.route('/restaurant', methods=['POST'])
+@jwt_required()
+def add_restaurant():
+    user_id = get_jwt_identity()
+    try:
+        response = recommendation_service.add_restaurant(request)
         return jsonify(response)
     except Exception as e:
         print(e)

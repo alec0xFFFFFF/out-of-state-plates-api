@@ -31,18 +31,70 @@ class RecommendationService:
     # OpenAI API configuration
     self.openai_client = OpenAI(api_key=os.environ.get("OPENAI_KEY_NAME"))
 
-  def add_restaurant(self, restaurant):
+  def get_restaurants(self, user_id, page_number=1, page_size=10):
+     # todo index
+     # todo sort by location from user's request?
+     offset = (page_number - 1) * page_size
+     restaurants = Restaurant.query.filter_by().limit(page_size).offset(offset).all()
+     restaurants_obj = [restaurant.to_dict() for restaurant in restaurants]
+     total_restaurants_count = Restaurant.query.filter_by().count()
+     total_pages = (total_restaurants_count + page_size - 1) // page_size
+
+     return {
+        "restaurants": restaurants_obj,
+        "total_pages": total_pages,
+        "current_page": page_number,
+        "page_size": page_size
+     }
+
+  def add_restaurant(self, request):
+    price = request.form.get('price')
+    restaurant_name = request.form.get('restaurant_name')
+    cuisine = request.form.get('cuisine')
+    description = request.form.get('description')
+    embedding = self._get_openai_embedding(description)
+    if embedding is None:
+        raise Exception("Unable to generate embeddings")
+
+    restaurant = Restaurant(
+        price=price, 
+        cuisine=cuisine, 
+        description=description,
+        name=restaurant_name
+    )
+    self.db.session.add(restaurant)
+    self.db.session.commit()
+    return {"status": "success"}
     raise NotImplementedError("add_restaurant must be implemented")
 
-  def get_meals(self, request, user_id):
-     # todo pagination  and index
-     meals = Meal.query.filter_by(user_id=user_id).all()
-     return [meal.to_dict() for meal in meals]
+
+  def delete_meal(self, request, user_id):
+     id = request.get("id")
+     meal = Meal.query.filter_by(id=id, user_id=user_id).first()
+     self.db.sessions.delete(meal)
+     self.db.session.commit()
+     return {"status": "success"}
+  
+  def get_meals(self, user_id, page_number=1, page_size=10):
+     # todo index
+     # todo get all meals not just user's?
+     offset = (page_number - 1) * page_size
+     meals = Meal.query.filter_by(user_id=user_id).limit(page_size).offset(offset).all()
+     meals_obj = [meal.to_dict() for meal in meals]
+     total_meals_count = Meal.query.filter_by(user_id=user_id).count()
+     total_pages = (total_meals_count + page_size - 1) // page_size
+
+     return {
+        "meals": meals_obj,
+        "total_pages": total_pages,
+        "current_page": page_number,
+        "page_size": page_size
+     }
       
   def add_meal(self, request, user_id):
      # todo return  meal
     price = request.form.get('price')
-    restaurant_name = request.form.get('restaurant_name')
+    restaurant_id = request.form.get('restaurant_id')
     cuisine = request.form.get('cuisine')
     description = request.form.get('description')
     meal_name = request.form.get('mealName')
@@ -53,17 +105,16 @@ class RecommendationService:
             image_url = self._upload_image_to_s3(image)
             if image_url:
                 image_urls.append(image_url)
-    print(image_urls)
     # Generate embeddings for the description
-    description = "test"
     embedding = self._get_openai_embedding(description)
     if embedding is None:
         raise Exception("Unable to generate embeddings")
 
-    # todo user_id, restaurant_id 
+    # todo restaurant_id 
     # embedding
     meal = Meal(
         user_id=user_id,
+        restaurant_id=restaurant_id,
         price=price, 
         cuisine=cuisine, 
         description=description, 
