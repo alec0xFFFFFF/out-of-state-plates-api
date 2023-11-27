@@ -34,7 +34,12 @@ class RecommendationService:
   def add_restaurant(self, restaurant):
     raise NotImplementedError("add_restaurant must be implemented")
 
+  def get_meals(self, request, user_id):
+     # todo pagination  and index
+     return Meal.query.filter_by(user_id=id).all()
+      
   def add_meal(self, request, user_id):
+     # todo return  meal
     price = request.form.get('price')
     restaurant_name = request.form.get('restaurant_name')
     cuisine = request.form.get('cuisine')
