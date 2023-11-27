@@ -5,7 +5,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from api.api import create_api
 from api.services.factory import create_user_service, create_recommendation_service
 from sqlalchemy.exc import OperationalError
-from data.models import db
+from data.models import db, InvalidCredentialsError
 import psycopg2
 from psycopg2 import pool
 import boto3
