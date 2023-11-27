@@ -27,7 +27,7 @@ class RecommendationService:
 
   def __init__(self, db):
     self.db = db
-    self.s3_client = boto3.client('s3', aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_KEY_ID"))
+    self.s3_client = boto3.client('s3', aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_KEY_ID"), region_name="us-west-2")
     # OpenAI API configuration
     self.openai_client = OpenAI(api_key=os.environ.get("OPENAI_KEY_NAME"))
 
