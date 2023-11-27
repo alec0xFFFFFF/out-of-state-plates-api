@@ -44,7 +44,6 @@ class RecommendationService:
     image_urls = []
     if 'images' in request.files:
         for image in request.files.getlist('images'):
-            print("uploading im")
             image_url = self._upload_image_to_s3(image)
             if image_url:
                 image_urls.append(image_url)
