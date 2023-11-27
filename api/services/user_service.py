@@ -17,14 +17,12 @@ class UserService:
 
   def login(self, username, email, phone, password):
     user = User.query.filter_by(username=username).first()
-    print(user)
     if not user and email:
         user = User.query.filter_by(email=email).first()
-        print(user)
     if not user and phone:
         user = User.query.filter_by(phone=phone).first()
-        print(user)
     if user and check_password_hash(user.password_hash, password):
+        print(f"{user} logged in")
         return create_access_token(identity=username)
     raise InvalidCredentialsError()
 
