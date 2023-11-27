@@ -8,7 +8,6 @@ from api.services.user_service import InvalidCredentialsError
 from sqlalchemy.exc import OperationalError
 from data.models import db
 import psycopg2
-from psycopg2 import pool
 import boto3
 import uuid
 import openai
