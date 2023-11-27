@@ -42,12 +42,14 @@ class RecommendationService:
 
     if 'images' in request.files:
         for image in request.files.getlist('images'):
+            print("uploading im")
             image_url = self._upload_image_to_s3(image)
             if image_url:
                 image_urls.append(image_url)
-
+    print(image_urls)
     # Generate embeddings for the description
     embedding = self._get_openai_embedding(description)
+    print(embedding)
     if embedding is None:
         raise Exception("Unable to generate embeddings")
 
@@ -127,8 +129,7 @@ class RecommendationService:
     except Exception as e:
         print(f"Error uploading to S3: {e}")
         return None
-
-def _get_openai_embedding(self, text):
+  def _get_openai_embedding(self, text):
     try:
         response = openai.Embedding.create(input=text, model="text-similarity-babbage-001")
         return response['data'][0]['embedding']
