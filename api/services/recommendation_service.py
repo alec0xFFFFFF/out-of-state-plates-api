@@ -48,6 +48,7 @@ class RecommendationService:
                 image_urls.append(image_url)
     print(image_urls)
     # Generate embeddings for the description
+    print(f"d: {description}, r: {review}")
     embedding = self._get_openai_embedding(description)
     print(embedding)
     if embedding is None:
@@ -129,7 +130,7 @@ class RecommendationService:
     except Exception as e:
         print(f"Error uploading to S3: {e}")
         return None
-  def _get_openai_embedding(self, text):
+  def _get_openai_embedding(self, text="test"):
     try:
         response = self.openai_client.embeddings.create(input=text, model="text-embedding-ada-002")
         return response['data'][0]['embedding']
