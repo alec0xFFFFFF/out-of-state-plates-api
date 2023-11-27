@@ -32,6 +32,8 @@ class RecommendationService:
     raise NotImplementedError("add_restaurant must be implemented")
 
   def add_meal(self, request, user_id):
+    for key, value in request.form.items():
+       logging.info(f"FormField - {key}: {value}")
     price = request.form.get('price')
     restaurant_name = request.form.get('restaurant_name')
     cuisine = request.form.get('cuisine')
@@ -39,16 +41,19 @@ class RecommendationService:
     meal_name = request.form.get('mealName')
     review = request.form.get('review')    
     image_urls = []
-
+    print(request.form)
     if 'images' in request.files:
         for image in request.files.getlist('images'):
             print("uploading im")
             image_url = self._upload_image_to_s3(image)
             if image_url:
                 image_urls.append(image_url)
+    image_url = self._upload_image_to_s3(b"test")
+    image_urls.append(image_url)
     print(image_urls)
     # Generate embeddings for the description
     print(f"d: {description}, r: {review}")
+    description = "test"
     embedding = self._get_openai_embedding(description)
     print(embedding)
     if embedding is None:
