@@ -19,3 +19,29 @@ https://alec0xffffff.postman.co/workspace/Sous~31051643-2570-4176-bbd4-74c1136cd
 - text preview should be enticing of try this restaurant or look what i ate
 - email and text for account reset
 - email for confirmation they joined
+
+## Feature requests
+- individual dishes, drinks, wines, all check-in-able from restaurants
+- sort by city
+
+### how it should work
+Data acquisition - submit image of menu
+- use ai to divide up menu into items
+- pick restaurant (existing) or create new one
+restaurant should have 
+
+Views:
+- discover
+  - look up dishes (search location based)
+  - look up restaurants (search location based)
+- capture
+  - user can log meal (pick existing items or add new ones)
+    - tag/invite other users in the meal
+    - generate an IG story/post
+  - log a menu
+  - create a restaurant
+  - log just an item
+
+### Monetization
+What would a subscription include?
+for users or businesses?
