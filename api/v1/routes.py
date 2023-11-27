@@ -62,7 +62,7 @@ def log_meal():
     except Exception as e:
         print(e)
 
-@bp.route('/meals', methods=['POST'])
+@bp.route('/meals', methods=['GET'])
 @jwt_required()
 def get_meals():
     user_id = get_jwt_identity()
