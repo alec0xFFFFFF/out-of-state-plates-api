@@ -85,17 +85,5 @@ def register():
 
     return jsonify(access_token=access_token), 201
 
-# Protected route
-@bp.route('/protected', methods=['GET'])
-@jwt_required()
-def protected():
-    current_user = get_jwt_identity()
-    return jsonify(logged_in_as=current_user), 200
-
-@bp.route('/', methods=['GET'])
-def hello_world():
-    response = {"status": "success", "message": "hello world! welcome to out of state plates"}
-    return jsonify(response), 200
-
 def init_api_v1(app):
     app.register_blueprint(bp, url_prefix='/api/v1')
