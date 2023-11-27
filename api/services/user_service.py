@@ -13,10 +13,18 @@ class UserService:
     self.db = db
 
   def login(self, request):
-    username = request.json.get('username', None)
-    password = request.json.get('password', None)
+    username = request.json.get('username')
+    email = request.json.get('email')
+    phone = request.json.get('phone-number')
+    password = request.json.get('password')
+      # todo by username, phone number or  email address
+    
     user = User.query.filter_by(username=username).first()
-
+    u2 = User.query.filter_by(email=email).first()
+    u3 = User.query.filter_by(phone=phone).first()
+    print(user)
+    print(u2)
+    print(u3)
     if user and check_password_hash(user.password_hash, password):
         return create_access_token(identity=username)
     raise InvalidCredentialsError()
