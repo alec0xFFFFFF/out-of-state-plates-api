@@ -30,7 +30,7 @@ class Restaurant(db.Model):
 class Meal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, ForeignKey('user.id'))
-    restaurant_id = db.Column(db.Integer, ForeignKey('restaurant.id'))
+    restaurant_id = db.Column(db.Integer, ForeignKey('restaurant.id'), nullable=True)
     homecooked = db.Column(Boolean, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     cuisine = db.Column(db.String(50), nullable=False)
