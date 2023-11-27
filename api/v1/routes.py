@@ -22,18 +22,39 @@ recommendation_service = create_recommendation_service(db)
 # TODO get user's meals
 # TODO get recommendations
 
+@bp.route('/recommend_test', methods=['POST'])
+def recommend_meal_test():
+    user_id = 1
+    response = recommendation_service.get_recommendation(request.json, user_id)
+
+    return jsonify(response)
+
+
+@bp.route('/meal_test', methods=['POST'])
+def log_meal_test():
+    user_id = 1
+    print("logging meal")
+    try:
+        response = recommendation_service.add_meal(request, user_id)
+        return jsonify(response)
+    except Exception as e:
+        print(e)
+
 @bp.route('/recommend', methods=['POST'])
+@jwt_required()
 def recommend_meal():
-    user_id = 0 # user_id = get_jwt_identity()
+    user_id = get_jwt_identity()
+    print(f"recommending meal for user {user_id}")
     response = recommendation_service.get_recommendation(request.json, user_id)
 
     return jsonify(response)
 
 
 @bp.route('/meal', methods=['POST'])
+@jwt_required()
 def log_meal():
-    user_id = 0 # user_id = get_jwt_identity()
-    print("logging meal")
+    user_id = get_jwt_identity()
+    print(f"logging meal for user {user_id}")
     try:
         response = recommendation_service.add_meal(request, user_id)
         return jsonify(response)
