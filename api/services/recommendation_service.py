@@ -33,7 +33,7 @@ class RecommendationService:
 
   def add_meal(self, request, user_id):
     for key, value in request.form.items():
-       logging.info(f"FormField - {key}: {value}")
+       print(f"FormField - {key}: {value}")
     price = request.form.get('price')
     restaurant_name = request.form.get('restaurant_name')
     cuisine = request.form.get('cuisine')
