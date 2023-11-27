@@ -131,7 +131,7 @@ class RecommendationService:
         return None
   def _get_openai_embedding(self, text):
     try:
-        response = openai.Embedding.create(input=text, model="text-similarity-babbage-001")
+        response = self.openai_client.embeddings.create(input=text, model="text-embedding-ada-002")
         return response['data'][0]['embedding']
     except Exception as e:
         print(f"Error generating embedding: {e}")
