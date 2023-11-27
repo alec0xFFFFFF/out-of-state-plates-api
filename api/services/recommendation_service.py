@@ -41,14 +41,14 @@ class RecommendationService:
     meal_name = request.form.get('mealName')
     review = request.form.get('review')    
     image_urls = []
-    print(request.form)
     if 'images' in request.files:
         for image in request.files.getlist('images'):
             print("uploading im")
             image_url = self._upload_image_to_s3(image)
             if image_url:
                 image_urls.append(image_url)
-    image_url = self._upload_image_to_s3(b"test")
+    fileobj = self.string_to_fileobj("test text", "test.txt")
+    image_url = self._upload_image_to_s3(fileobj)
     image_urls.append(image_url)
     print(image_urls)
     # Generate embeddings for the description
@@ -101,8 +101,6 @@ class RecommendationService:
         return self._assemble_recipe_recommendation_context()
      elif classification == Classification.RESTAURANT:
         ctx = self._assemble_restaurant_recommendation_context(lat, long, location)
-        print("restaurant")
-        print(ctx)
         return ctx
      return self._assemble_default_context()
 
@@ -127,15 +125,23 @@ class RecommendationService:
     return {"message": resp.content}
     raise NotImplementedError("get_recommendation must be implemented")
 
+  def string_to_fileobj(self, string_data, filename):
+    # Convert string to a file-like object
+    fileobj = io.StringIO(string_data)
+    fileobj.name = filename
+    return fileobj
+     
   def _upload_image_to_s3(self, file):
     try:
         file_key = str(uuid.uuid4())  # Generate unique file name
+       
         self.s3_client.upload_fileobj(file, os.environ.get("IMAGE_BUCKET_NAME"), file_key)
         return f'https://{os.environ.get("IMAGE_BUCKET_NAME")}.s3.amazonaws.com/{file_key}'
     except Exception as e:
         print(f"Error uploading to S3: {e}")
         return None
-  def _get_openai_embedding(self, text="test"):
+       
+  def _get_openai_embedding(self, text):
     try:
         response = self.openai_client.embeddings.create(input=text, model="text-embedding-ada-002")
         return response['data'][0]['embedding']
