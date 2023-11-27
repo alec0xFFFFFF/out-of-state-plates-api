@@ -22,8 +22,8 @@ class UserService:
     if not user and phone:
         user = User.query.filter_by(phone=phone).first()
     if user and check_password_hash(user.password_hash, password):
-        print(f"{user} logged in")
-        return create_access_token(identity=username)
+        print(f"user: {user.id} logged in")
+        return create_access_token(identity=user.id)
     raise InvalidCredentialsError()
 
   def register(self, username, email, phone, password, name):
