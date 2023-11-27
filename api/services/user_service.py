@@ -24,6 +24,6 @@ class UserService:
   def register(self, username, email, phone, password, name):
       user = User(username=username, email=email, phone=phone, name=name)
       user.set_password(password)
-      db.session.add(user)
-      db.session.commit()
+      self.db.session.add(user)
+      self.db.session.commit()
       return user
