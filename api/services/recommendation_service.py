@@ -1,6 +1,5 @@
 import boto3
 import os
-import io
 from openai import OpenAI
 import uuid
 from data.models import Meal, Restaurant
@@ -49,9 +48,6 @@ class RecommendationService:
             image_url = self._upload_image_to_s3(image)
             if image_url:
                 image_urls.append(image_url)
-    fileobj = self.string_to_fileobj("test text", "test.txt")
-    image_url = self._upload_image_to_s3(fileobj)
-    image_urls.append(image_url)
     print(image_urls)
     # Generate embeddings for the description
     print(f"d: {description}, r: {review}")
@@ -126,12 +122,6 @@ class RecommendationService:
     resp = completion.choices[0].message
     return {"message": resp.content}
     raise NotImplementedError("get_recommendation must be implemented")
-
-  def string_to_fileobj(self, string_data, filename):
-    # Convert string to a file-like object
-    fileobj = io.StringIO(string_data)
-    fileobj.name = filename
-    return fileobj
      
   def _upload_image_to_s3(self, file):
     try:
@@ -147,7 +137,8 @@ class RecommendationService:
   def _get_openai_embedding(self, text):
     try:
         response = self.openai_client.embeddings.create(input=text, model="text-embedding-ada-002")
-        return response['data'][0]['embedding']
+        print(response)
+        return response.data[0].embedding
     except Exception as e:
         print(f"Error generating embedding: {e}")
         return None
