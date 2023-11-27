@@ -64,7 +64,7 @@ class RecommendationService:
         description=description, 
         image_urls=image_urls,
         homecooked=False,
-        name=name
+        name=meal_name
     )
     db.session.add(meal)
     db.session.commit()
