@@ -62,7 +62,17 @@ def log_meal():
     except Exception as e:
         print(e)
 
-# Login endpoint
+@bp.route('/meals', methods=['POST'])
+@jwt_required()
+def get_meals():
+    user_id = get_jwt_identity()
+    print(f"logging meal for user {user_id}")
+    try:
+        response = recommendation_service.get_meals(request, user_id)
+        return jsonify(response)
+    except Exception as e:
+        print(e)
+
 @bp.route('/login', methods=['POST'])
 def login():
     username = request.json.get('username')
