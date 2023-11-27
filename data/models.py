@@ -39,4 +39,18 @@ class Meal(db.Model):
     image_urls = db.Column(db.Text, nullable=True)
     created_at = db.Column(DateTime, default=datetime.utcnow)
     updated_at = db.Column(DateTime, onupdate=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'restaurant_id': self.restaurant_id,
+            'homecooked': self.homecooked,
+            'cuisine': self.cuisine,
+            'description': self.description,
+            'price': self.price,
+            'image_urls': self.image_urls,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
 
