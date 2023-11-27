@@ -12,15 +12,15 @@ class UserService:
   def __init__(self, db):
     self.db = db
 
-  def login(self, username, phone, email, password):
-      # todo by username, phone number or  email address
-    
+  def login(self, username, email, phone, password):
     user = User.query.filter_by(username=username).first()
-    u2 = User.query.filter_by(email=email).first()
-    u3 = User.query.filter_by(phone=phone).first()
     print(user)
-    print(u2)
-    print(u3)
+    if not user and email:
+        user = User.query.filter_by(email=email).first()
+        print(user)
+    if not user and phone:
+        user = User.query.filter_by(phone=phone).first()
+        print(user)
     if user and check_password_hash(user.password_hash, password):
         return create_access_token(identity=username)
     raise InvalidCredentialsError()
