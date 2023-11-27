@@ -4,7 +4,8 @@ import io
 from openai import OpenAI
 import uuid
 from data.models import Meal, Restaurant
-from enum import Enumimport logging
+from enum import Enum
+import logging
 
 logging.basicConfig(level=logging.INFO)
 
