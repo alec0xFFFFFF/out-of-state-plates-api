@@ -66,8 +66,8 @@ class RecommendationService:
         homecooked=False,
         name=meal_name
     )
-    db.session.add(meal)
-    db.session.commit()
+    self.db.session.add(meal)
+    self.db.session.commit()
     return {"status": "success"}
   
   def _classify(self, msg):
