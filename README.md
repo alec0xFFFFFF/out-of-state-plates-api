@@ -45,3 +45,11 @@ Views:
 ### Monetization
 What would a subscription include?
 for users or businesses?
+for users:
+- save dishes and restaurants to lists
+- curated lists from food influencers
+- sell access to your lists
+
+for businesses
+- edit access?
+- advertise?
