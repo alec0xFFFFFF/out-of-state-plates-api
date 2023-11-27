@@ -36,6 +36,7 @@ class Meal(db.Model):
     cuisine = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=True)
     price = db.Column(db.Numeric(10, 2), nullable=False)
+    image_urls = db.Column(db.Text, nullable=True)
     created_at = db.Column(DateTime, default=datetime.utcnow)
     updated_at = db.Column(DateTime, onupdate=datetime.utcnow)
 
