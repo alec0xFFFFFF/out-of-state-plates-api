@@ -37,6 +37,7 @@ Views:
 - discover
   - look up dishes (search location based)
   - look up restaurants (search location based)
+    - link reservations and take out order
 - capture
   - user can log meal (pick existing items or add new ones)
     - tag/invite other users in the meal
