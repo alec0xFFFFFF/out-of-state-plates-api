@@ -18,8 +18,7 @@ def create_api():
     app.config['JWT_SECRET_KEY'] = os.environ.get("JWT_SECRET_KEY")
     # Database configuration
     print(os.environ.get("PG_DB_URI"))
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("PG_DB_URI")
-    # f'postgresql://{db_params["user"]}:{db_params["password"]}@{db_params["host"]}:{db_params["port"]}/{db_params["dbname"]}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_params["user"]}:{db_params["password"]}@{db_params["host"]}:{db_params["port"]}/{db_params["dbname"]}'
     print(app.config['SQLALCHEMY_DATABASE_URI'])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
